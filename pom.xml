@@ -11,12 +11,11 @@
 	<groupId>com.avilapps</groupId>
 	<artifactId>pdf-services</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
 	<name>pdf-services</name>
 	<description>API for PDF files</description>
 
 	<properties>
-		<java.version>14</java.version>
+		<java.version>11</java.version>
 	</properties>
 
 	<dependencies>
