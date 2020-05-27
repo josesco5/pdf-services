@@ -1,14 +1,13 @@
 package com.avilapps.pdf_services.controllers;
 
+import com.avilapps.pdf_services.dto.FoliationRequest;
+import com.avilapps.pdf_services.dto.FoliationResponse;
 import com.avilapps.pdf_services.dto.PageCountResponse;
 import com.avilapps.pdf_services.services.PageCounter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -25,5 +24,12 @@ public class PDFController {
         LOG.info("Counting pages for " + fileUrl);
         int pagesTotal = pageCounter.count(fileUrl);
         return new PageCountResponse(fileUrl, pagesTotal);
+    }
+
+    @PostMapping("/foliate")
+    public FoliationResponse foliate(@RequestBody FoliationRequest request) {
+        LOG.info("Foliating PDF file at " + request.getFoliationSettings().getFileUrl());
+        String fileUrl = request.getFoliationSettings().getFileUrl();
+        return new FoliationResponse(fileUrl, fileUrl);
     }
 }
