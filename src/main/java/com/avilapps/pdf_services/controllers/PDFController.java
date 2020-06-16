@@ -3,6 +3,7 @@ package com.avilapps.pdf_services.controllers;
 import com.avilapps.pdf_services.dto.FoliationRequest;
 import com.avilapps.pdf_services.dto.FoliationResponse;
 import com.avilapps.pdf_services.dto.PageCountResponse;
+import com.avilapps.pdf_services.services.FileUploader;
 import com.avilapps.pdf_services.services.Foliator;
 import com.avilapps.pdf_services.services.PageCounter;
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ public class PDFController {
     @Autowired
     private Foliator foliator;
 
+    @Autowired
+    private FileUploader uploader;
+
     @GetMapping("/pages-count")
     public PageCountResponse countPDFPages(@RequestParam(value="url") String fileUrl) throws IOException {
         LOG.info("Counting pages for " + fileUrl);
@@ -36,6 +40,7 @@ public class PDFController {
         LOG.info("Foliating PDF file at " + request.getFoliationSettings().getFileUrl());
         String fileUrl = request.getFoliationSettings().getFileUrl();
         File result = foliator.foliate(request.getFoliationSettings());
+        uploader.upload(result, request.getUploadSettings());
         result.deleteOnExit();
         return new FoliationResponse(fileUrl, fileUrl);
     }
