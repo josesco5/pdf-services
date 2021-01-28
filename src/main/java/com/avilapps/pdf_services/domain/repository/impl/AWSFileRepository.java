@@ -1,11 +1,11 @@
-package com.avilapps.pdf_services.domain.services.impl;
+package com.avilapps.pdf_services.domain.repository.impl;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.avilapps.pdf_services.common.exceptions.ServiceException;
 import com.avilapps.pdf_services.domain.model.ContentFile;
-import com.avilapps.pdf_services.domain.services.FileUploader;
+import com.avilapps.pdf_services.domain.repository.FileUploader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
