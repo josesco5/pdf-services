@@ -3,7 +3,7 @@ package com.avilapps.pdf_services.domain.services.impl;
 import com.avilapps.pdf_services.common.exceptions.ServiceException;
 import com.avilapps.pdf_services.domain.model.Document;
 import com.avilapps.pdf_services.domain.services.DocumentService;
-import com.avilapps.pdf_services.domain.repository.FileUploader;
+import com.avilapps.pdf_services.domain.repository.FileRepository;
 import com.avilapps.pdf_services.domain.services.Foliator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ import java.io.File;
 public class DocumentFoliateService implements DocumentService {
 
     private final Foliator foliator;
-    private final FileUploader fileUploader;
+    private final FileRepository fileRepository;
 
-    public DocumentFoliateService(Foliator foliator, FileUploader fileUploader) {
+    public DocumentFoliateService(Foliator foliator, FileRepository fileRepository) {
         this.foliator = foliator;
-        this.fileUploader = fileUploader;
+        this.fileRepository = fileRepository;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class DocumentFoliateService implements DocumentService {
         try {
             File foliatedFile = foliator.foliate(document.getOriginalFile().getUrl(), document.getInitialFolio());
             document.getProcessedFile().setContent(foliatedFile);
-            String foliatedFileUrl = fileUploader.upload(document.getProcessedFile());
+            String foliatedFileUrl = fileRepository.upload(document.getProcessedFile());
             document.getProcessedFile().setUrl(foliatedFileUrl);
 
             return document;

@@ -5,7 +5,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.avilapps.pdf_services.common.exceptions.ServiceException;
 import com.avilapps.pdf_services.domain.model.ContentFile;
-import com.avilapps.pdf_services.domain.repository.FileUploader;
+import com.avilapps.pdf_services.domain.repository.FileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.Date;
 
 @Service
-public class AWSFileRepository implements FileUploader {
+public class AWSFileRepository implements FileRepository {
     private static final Logger LOG = LoggerFactory.getLogger(AWSFileRepository.class);
     private AmazonS3 s3Client;
 
