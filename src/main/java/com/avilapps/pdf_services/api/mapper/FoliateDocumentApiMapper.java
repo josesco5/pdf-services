@@ -10,6 +10,8 @@ import org.mapstruct.Mapping;
 public interface FoliateDocumentApiMapper {
 
     @Mapping(target = "originalFile.url", source = "originPath")
+    @Mapping(target = "processedFile.url", source = "destinationPath")
+    @Mapping(target = "initialFolio", source = "initialFolio")
     Document mapApiRequestToDomainModel(FoliateDocumentRequest foliateDocumentRequest);
 
     @Mapping(target = "url", source = "processedFile.url")

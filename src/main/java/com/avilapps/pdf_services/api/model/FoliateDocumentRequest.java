@@ -1,5 +1,9 @@
 package com.avilapps.pdf_services.api.model;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class FoliateDocumentRequest {
     private String originPath;
     private String initialFolio;
