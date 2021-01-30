@@ -1,5 +1,6 @@
 package com.avilapps.pdf_services.domain.services.impl;
 
+import com.avilapps.pdf_services.common.exceptions.ServiceException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,6 @@ import java.lang.invoke.MethodHandles;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 class PDFBoxFoliatorServiceTest {
     private static Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -34,7 +34,7 @@ class PDFBoxFoliatorServiceTest {
     }
 
     @Test
-    public void loadRemoteFile() throws IOException {
+    public void loadRemoteFile() {
         String fileUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
         File result = foliatorService.foliate(fileUrl, 1);
         LOG.info("File saved at " + result.getAbsolutePath());
@@ -81,5 +81,17 @@ class PDFBoxFoliatorServiceTest {
 
         document.close();
         result.deleteOnExit();
+    }
+
+    @Test
+    public void cannotFoliateANonPdfFile() {
+        String fileUrl = "http://www.sci.utah.edu/~macleod/docs/txt2html/sample.txt";
+        assertThrows(ServiceException.class, () -> foliatorService.foliate(fileUrl, 1));
+    }
+
+    @Test
+    public void cannotFoliateANonExistentFile() {
+        String fileUrl = "http://www.sci.utah.edu/~macleod/docs/txt2html/non-existent.pdf";
+        assertThrows(ServiceException.class, () -> foliatorService.foliate(fileUrl, 1));
     }
 }

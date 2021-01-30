@@ -5,5 +5,5 @@ import java.io.IOException;
 
 public interface Foliator {
 
-    File foliate(String fileUrl, int initialFolio) throws IOException;
+    File foliate(String fileUrl, int initialFolio);
 }

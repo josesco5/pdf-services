@@ -1,5 +1,6 @@
 package com.avilapps.pdf_services.domain.services.impl;
 
+import com.avilapps.pdf_services.common.exceptions.ServiceException;
 import com.avilapps.pdf_services.domain.services.Foliator;
 import com.avilapps.pdf_services.utils.NumberToWords;
 import org.apache.pdfbox.io.MemoryUsageSetting;
@@ -19,6 +20,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandles;
 import java.net.URL;
 import java.nio.file.Paths;
 
@@ -27,7 +29,7 @@ public class PDFBoxFoliatorService implements Foliator {
     private static final int FONT_SIZE = 10;
     private static final File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
     private static final File OUTPUT_DIRECTORY = new File(TEMP_DIRECTORY, "output");
-    private static final Logger LOG = LoggerFactory.getLogger(PDFBoxFoliatorService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 
     public PDFBoxFoliatorService() {
@@ -36,25 +38,31 @@ public class PDFBoxFoliatorService implements Foliator {
         }
     }
 
-    public File foliate(String fileUrl, int initialFolio) throws IOException {
-        PDDocument document = loadDocument(fileUrl);
-        String filename = Paths.get(fileUrl).getFileName().toString();
+    public File foliate(String fileUrl, int initialFolio) {
+        try {
+            PDDocument document = loadDocument(fileUrl);
+            String filename = Paths.get(fileUrl).getFileName().toString();
 
-        Resource resource = new ClassPathResource("static/fonts/Roboto-Regular.ttf");
-        InputStream fontStream = resource.getInputStream();
-        PDFont font = PDType0Font.load(document, fontStream);
-        int totalPages = document.getNumberOfPages();
+            Resource resource = new ClassPathResource("static/fonts/Roboto-Regular.ttf");
+            InputStream fontStream = resource.getInputStream();
+            PDFont font = PDType0Font.load(document, fontStream);
+            int totalPages = document.getNumberOfPages();
 
-        for (int i = 0; i < totalPages; i++) {
-            PDPage page = document.getPage(i);
-            addFolioToPage(document, page, initialFolio + i, font);
-            LOG.info("Foliated page " + i);
+            for (int i = 0; i < totalPages; i++) {
+                PDPage page = document.getPage(i);
+                addFolioToPage(document, page, initialFolio + i, font);
+                LOG.info("Foliated page " + i);
+            }
+
+            File outputFile = new File(OUTPUT_DIRECTORY, filename);
+            document.save(outputFile);
+            document.close();
+
+            return outputFile;
+        } catch (Exception exception) {
+            LOG.error(String.format("Error when foliating document %s", fileUrl), exception);
+            throw new ServiceException(exception);
         }
-
-        File outputFile = new File(OUTPUT_DIRECTORY, filename);
-        document.save(outputFile);
-
-        return outputFile;
     }
 
     private PDDocument loadDocument(String fileUrl) throws IOException {
