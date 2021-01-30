@@ -29,6 +29,7 @@ public class DocumentFoliateService implements DocumentService {
             document.getProcessedFile().setContent(foliatedFile);
             String foliatedFileUrl = fileRepository.upload(document.getProcessedFile());
             document.getProcessedFile().setUrl(foliatedFileUrl);
+            foliatedFile.deleteOnExit();
 
             return document;
         } catch (Exception exception) {
