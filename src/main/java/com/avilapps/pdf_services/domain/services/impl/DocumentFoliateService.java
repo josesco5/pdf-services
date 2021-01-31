@@ -1,5 +1,6 @@
 package com.avilapps.pdf_services.domain.services.impl;
 
+import com.avilapps.pdf_services.common.exceptions.RepositoryException;
 import com.avilapps.pdf_services.common.exceptions.ServiceException;
 import com.avilapps.pdf_services.domain.model.Document;
 import com.avilapps.pdf_services.domain.services.DocumentService;
@@ -32,6 +33,8 @@ public class DocumentFoliateService implements DocumentService {
             foliatedFile.deleteOnExit();
 
             return document;
+        } catch (RepositoryException exception) {
+            throw exception;
         } catch (Exception exception) {
             throw new ServiceException(exception);
         }

@@ -5,6 +5,8 @@ import com.avilapps.pdf_services.api.mapper.FoliateDocumentApiMapper;
 import com.avilapps.pdf_services.api.model.FoliateDocumentRequest;
 import com.avilapps.pdf_services.api.model.FoliateDocumentResponse;
 import com.avilapps.pdf_services.common.exceptions.DelegateException;
+import com.avilapps.pdf_services.common.exceptions.RepositoryException;
+import com.avilapps.pdf_services.common.exceptions.ServiceException;
 import com.avilapps.pdf_services.domain.model.Document;
 import com.avilapps.pdf_services.domain.services.DocumentService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +31,8 @@ public class DocumentFoliateDelegate implements DocumentDelegate {
             Document resultDocument = documentService.foliate(document);
             return foliateDocumentApiMapper.mapDomainModelToApiResponse(resultDocument);
 
+        } catch (ServiceException | RepositoryException exception) {
+            throw exception;
         } catch (Exception exception) {
             throw new DelegateException(exception);
         }
