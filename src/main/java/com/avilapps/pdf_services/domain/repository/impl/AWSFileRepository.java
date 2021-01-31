@@ -3,7 +3,7 @@ package com.avilapps.pdf_services.domain.repository.impl;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.avilapps.pdf_services.common.exceptions.ServiceException;
+import com.avilapps.pdf_services.common.exceptions.RepositoryException;
 import com.avilapps.pdf_services.domain.model.ContentFile;
 import com.avilapps.pdf_services.domain.repository.FileRepository;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class AWSFileRepository implements FileRepository {
             return buildFileUrl(contentFile);
         } catch (Exception exception) {
             LOG.error("Error when uploading file to S3", exception);
-            throw new ServiceException(exception);
+            throw new RepositoryException(exception);
         }
     }
 
