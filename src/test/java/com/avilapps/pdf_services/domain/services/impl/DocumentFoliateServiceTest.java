@@ -7,17 +7,18 @@ import com.avilapps.pdf_services.domain.repository.FileRepository;
 import com.avilapps.pdf_services.domain.services.Foliator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class DocumentFoliateServiceTest {
 
     @Mock
@@ -47,7 +48,7 @@ class DocumentFoliateServiceTest {
     }
 
     @Test
-    public void whenFoliatingFileReturnsDocument() throws IOException {
+    public void whenFoliatingFileReturnsDocument() {
         String fileUrl = "http://localhost/file.pdf";
 
         Mockito.when(foliator.foliate(document.getOriginalFile().getUrl(), document.getInitialFolio()))
@@ -61,19 +62,17 @@ class DocumentFoliateServiceTest {
     }
 
     @Test
-    public void whenFoliatingFileThrowsException() throws IOException {
+    public void whenFoliatingFileThrowsException() {
         String fileUrl = "http://localhost/file.pdf";
 
         Mockito.when(foliator.foliate(document.getOriginalFile().getUrl(), document.getInitialFolio()))
                 .thenThrow(NullPointerException.class);
-        Mockito.when(fileRepository.upload(document.getProcessedFile()))
-                .thenReturn(fileUrl);
 
         assertThrows(ServiceException.class, () -> documentFoliateService.foliate(document));
     }
 
     @Test
-    public void whenUploadingFileThrowsException() throws IOException {
+    public void whenUploadingFileThrowsException() {
         String fileUrl = "http://localhost/file.pdf";
 
         Mockito.when(foliator.foliate(document.getOriginalFile().getUrl(), document.getInitialFolio()))
