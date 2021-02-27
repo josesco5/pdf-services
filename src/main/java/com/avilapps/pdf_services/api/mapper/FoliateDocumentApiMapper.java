@@ -3,10 +3,11 @@ package com.avilapps.pdf_services.api.mapper;
 import com.avilapps.pdf_services.api.model.FoliateDocumentRequest;
 import com.avilapps.pdf_services.api.model.FoliateDocumentResponse;
 import com.avilapps.pdf_services.domain.model.Document;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface FoliateDocumentApiMapper {
 
     @Mapping(target = "originalFile.url", source = "originPath")
