@@ -1,11 +1,9 @@
 package com.avilapps.pdf_services.utils;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
 public class NumberToWordsTest {
     @Test
     public void convertNumber1() {
