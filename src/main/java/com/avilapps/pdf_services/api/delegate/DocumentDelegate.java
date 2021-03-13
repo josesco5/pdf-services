@@ -2,11 +2,13 @@ package com.avilapps.pdf_services.api.delegate;
 
 import com.avilapps.pdf_services.api.model.FoliateDocumentRequest;
 import com.avilapps.pdf_services.api.model.FoliateDocumentResponse;
+import com.avilapps.pdf_services.api.model.UploadDocumentRequest;
+import com.avilapps.pdf_services.api.model.UploadDocumentResponse;
 import com.avilapps.pdf_services.common.exceptions.NonImplementedException;
 
 public interface DocumentDelegate {
 
-    default FoliateDocumentResponse upload(FoliateDocumentRequest request) {
+    default UploadDocumentResponse upload(UploadDocumentRequest request) {
         throw new NonImplementedException();
     }
 

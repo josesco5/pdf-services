@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
 @Qualifier("documentFoliateDelegate")
 public class DocumentFoliateDelegate implements DocumentDelegate {
 
-    private final DocumentService documentService;
+    private final DocumentService documentFoliateService;
     private final FoliateDocumentApiMapper foliateDocumentApiMapper;
 
-    public DocumentFoliateDelegate(DocumentService documentService, FoliateDocumentApiMapper foliateDocumentApiMapper) {
-        this.documentService = documentService;
+    public DocumentFoliateDelegate(DocumentService documentFoliateService, FoliateDocumentApiMapper foliateDocumentApiMapper) {
+        this.documentFoliateService = documentFoliateService;
         this.foliateDocumentApiMapper = foliateDocumentApiMapper;
     }
 
@@ -28,7 +28,7 @@ public class DocumentFoliateDelegate implements DocumentDelegate {
     public FoliateDocumentResponse foliate(FoliateDocumentRequest request) {
         try {
             Document document = foliateDocumentApiMapper.mapApiRequestToDomainModel(request);
-            Document resultDocument = documentService.foliate(document);
+            Document resultDocument = documentFoliateService.foliate(document);
             return foliateDocumentApiMapper.mapDomainModelToApiResponse(resultDocument);
 
         } catch (ServiceException | RepositoryException exception) {
