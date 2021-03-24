@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.4.3'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'jacoco'
 }
 
 group = 'com.avilapps'
@@ -26,7 +27,43 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.enabled true
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.8
+            }
+        }
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/ServletInitializer.java',
+                    '**/PdfServicesApplication.java',
+                    '**/api/delegate/DocumentDelegate.java',
+                    '**/api/mapper/**',
+                    '**/api/model/**',
+                    '**/common/**',
+                    '**/domain/services/DocumentService.java',
+                    '**/domain/model/**',
+                    '**/domain/repository/FileRepository.java'
+            ])
+        }))
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
