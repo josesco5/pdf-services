@@ -1,0 +1,9 @@
+{
+  "name": "PDFServices",
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "heroku/gradle"
+    }
+  ]
+}
