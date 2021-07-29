@@ -10,6 +10,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class FileUtilsTest {
@@ -31,5 +32,10 @@ class FileUtilsTest {
         );
         File receivedFile = fileUtils.receiveRemotePDF(remoteFile);
         assertThat(receivedFile).isNotNull();
+    }
+
+    @Test
+    public void whenReceivingNullRemoteFileThenThrowException() {
+        assertThrows(RuntimeException.class, () -> fileUtils.receiveRemotePDF(null));
     }
 }

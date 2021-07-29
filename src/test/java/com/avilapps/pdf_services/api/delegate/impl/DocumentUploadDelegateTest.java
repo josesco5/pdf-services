@@ -1,6 +1,7 @@
 package com.avilapps.pdf_services.api.delegate.impl;
 
 import com.avilapps.pdf_services.api.model.UploadDocumentRequest;
+import com.avilapps.pdf_services.api.model.UploadDocumentResponse;
 import com.avilapps.pdf_services.common.exceptions.DelegateException;
 import com.avilapps.pdf_services.common.exceptions.ServiceException;
 import com.avilapps.pdf_services.domain.model.ContentFile;
@@ -46,6 +47,22 @@ class DocumentUploadDelegateTest {
         uploadDocumentRequest.setFile(sentFile);
 
         file = new File("src/test/resources");
+    }
+
+    @Test
+    public void shouldUploadDocument() {
+
+        Mockito.when(fileUtils.receiveRemotePDF(uploadDocumentRequest.getFile()))
+                .thenReturn(file);
+        Mockito.when(documentService.upload(Mockito.any(ContentFile.class)))
+                .thenReturn("http://localhost/pdf");
+
+        UploadDocumentResponse result = documentUploadDelegate.upload(uploadDocumentRequest);
+
+        assertNotNull(result);
+
+        Mockito.verify(fileUtils).receiveRemotePDF(uploadDocumentRequest.getFile());
+        Mockito.verify(documentService).upload(Mockito.any(ContentFile.class));
     }
 
     @Test

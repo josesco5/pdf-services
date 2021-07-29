@@ -11,7 +11,7 @@ public class FileUtils {
     public File getOutputDirectory() {
         File tempDirectory = new File(System.getProperty("java.io.tmpdir"));
         File outputDirectory = new File(tempDirectory, "output");
-        if (!outputDirectory.exists() && outputDirectory.mkdir()) {
+        if (!outputDirectory.exists() && !outputDirectory.mkdir()) {
             throw new RuntimeException("Output Directory does not exists");
         }
 
