@@ -41,14 +41,18 @@ jacocoTestReport {
 jacocoTestCoverageVerification {
     violationRules {
         rule {
+            element = 'CLASS'
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
                 minimum = 0.8
             }
             excludes = [
+                    'com.avilapps.pdf_services.api.delegate.DocumentDelegate',
                     'com.avilapps.pdf_services.common.*',
-                    'com.avilapps.pdf_services.PdfServicesApplication.java'
+                    'com.avilapps.pdf_services.domain.services.DocumentService',
+                    'com.avilapps.pdf_services.PdfServicesApplication',
+                    'com.avilapps.pdf_services.ServletInitializer'
             ]
         }
     }
