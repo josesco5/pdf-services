@@ -16,8 +16,8 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.amazonaws:aws-java-sdk-s3:1.11.980'
-    implementation 'org.apache.pdfbox:pdfbox:2.0.23'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.11.1034'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.24'
 
     implementation 'org.mapstruct:mapstruct:1.4.1.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.1.Final'
@@ -33,33 +33,28 @@ test {
 jacocoTestReport {
     dependsOn test
     reports {
-        html.enabled true
-        html.destination file("${buildDir}/jacocoHtml")
+        xml.required = false
+        csv.required = false
     }
 }
 
 jacocoTestCoverageVerification {
     violationRules {
         rule {
+            element = 'CLASS'
             limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
                 minimum = 0.8
             }
+            excludes = [
+                    'com.avilapps.pdf_services.api.delegate.DocumentDelegate',
+                    'com.avilapps.pdf_services.common.*',
+                    'com.avilapps.pdf_services.domain.services.DocumentService',
+                    'com.avilapps.pdf_services.PdfServicesApplication',
+                    'com.avilapps.pdf_services.ServletInitializer'
+            ]
         }
-    }
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                    '**/ServletInitializer.java',
-                    '**/PdfServicesApplication.java',
-                    '**/api/delegate/DocumentDelegate.java',
-                    '**/api/mapper/**',
-                    '**/api/model/**',
-                    '**/common/**',
-                    '**/domain/services/DocumentService.java',
-                    '**/domain/model/**',
-                    '**/domain/repository/FileRepository.java'
-            ])
-        }))
     }
 }
 
@@ -68,3 +63,6 @@ check.dependsOn jacocoTestCoverageVerification
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean

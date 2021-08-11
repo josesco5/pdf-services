@@ -1,5 +1,6 @@
 package com.avilapps.pdf_services.domain.services.impl;
 
+import com.avilapps.pdf_services.common.exceptions.RepositoryException;
 import com.avilapps.pdf_services.common.exceptions.ServiceException;
 import com.avilapps.pdf_services.domain.model.ContentFile;
 import com.avilapps.pdf_services.domain.model.Document;
@@ -69,6 +70,18 @@ class DocumentFoliateServiceTest {
                 .thenThrow(NullPointerException.class);
 
         assertThrows(ServiceException.class, () -> documentFoliateService.foliate(document));
+    }
+
+    @Test
+    public void whenUploadingFileThrowsRepositoryException() {
+        String fileUrl = "http://localhost/file.pdf";
+
+        Mockito.when(foliator.foliate(document.getOriginalFile().getUrl(), document.getInitialFolio()))
+                .thenReturn(file);
+        Mockito.when(fileRepository.upload(document.getProcessedFile()))
+                .thenThrow(RepositoryException.class);
+
+        assertThrows(RepositoryException.class, () -> documentFoliateService.foliate(document));
     }
 
     @Test

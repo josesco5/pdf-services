@@ -91,4 +91,59 @@ class PDFBoxFoliatorServiceTest {
         String fileUrl = "http://www.sci.utah.edu/~macleod/docs/txt2html/non-existent.pdf";
         assertThrows(ServiceException.class, () -> foliatorService.foliate(fileUrl, 1));
     }
+
+
+    @Test
+    public void foliatePDFWithRotatedPagesOf90Degrees() throws IOException {
+        String fileUrl = "https://drive.google.com/uc?export=download&id=1rSJyWCDB8Ez_hB-ab71DQPDoxd02OFUf";
+        File result = foliatorService.foliate(fileUrl, 1);
+        LOG.info("File saved at " + result.getAbsolutePath());
+
+        PDDocument document = PDDocument.load(result);
+        PDFTextStripper pdfStripper = new PDFTextStripper();
+        String text = pdfStripper.getText(document);
+
+        assertEquals(1, document.getNumberOfPages());
+        assertTrue(text.contains("Fojas 1"));
+        assertTrue(text.contains("uno"));
+
+        document.close();
+        result.deleteOnExit();
+    }
+
+    @Test
+    public void foliatePDFWithRotatedPagesOf180Degrees() throws IOException {
+        String fileUrl = "https://drive.google.com/uc?export=download&id=1oIkPek4maQty8_fVmKY5BfHm0RRIvOq8";
+        File result = foliatorService.foliate(fileUrl, 1);
+        LOG.info("File saved at " + result.getAbsolutePath());
+
+        PDDocument document = PDDocument.load(result);
+        PDFTextStripper pdfStripper = new PDFTextStripper();
+        String text = pdfStripper.getText(document);
+
+        assertEquals(1, document.getNumberOfPages());
+        assertTrue(text.contains("Fojas 1"));
+        assertTrue(text.contains("uno"));
+
+        document.close();
+        result.deleteOnExit();
+    }
+
+    @Test
+    public void foliatePDFWithRotatedPagesOf270Degrees() throws IOException {
+        String fileUrl = "https://drive.google.com/uc?export=download&id=137o_TtsOeJwasvf2RrDPTb6josj40CFk";
+        File result = foliatorService.foliate(fileUrl, 1);
+        LOG.info("File saved at " + result.getAbsolutePath());
+
+        PDDocument document = PDDocument.load(result);
+        PDFTextStripper pdfStripper = new PDFTextStripper();
+        String text = pdfStripper.getText(document);
+
+        assertEquals(1, document.getNumberOfPages());
+        assertTrue(text.contains("Fojas 1"));
+        assertTrue(text.contains("uno"));
+
+        document.close();
+        result.deleteOnExit();
+    }
 }
