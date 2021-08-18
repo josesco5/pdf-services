@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.48'
     implementation 'org.apache.pdfbox:pdfbox:2.0.24'
 
