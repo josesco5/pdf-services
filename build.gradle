@@ -3,12 +3,22 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'jacoco'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.0'
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.6.0"
+    id "org.jetbrains.kotlin.plugin.spring" version "1.6.0"
 }
 
 group = 'com.avilapps'
 version = '0.0.1-SNAPSHOT'
 description = 'pdf-services'
 sourceCompatibility = '11'
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/kotlin'
+    main.java.srcDirs += 'src/main/java'
+}
+
+//kotlin.jvm.target.validation.mode = error
 
 repositories {
     mavenCentral()
@@ -19,6 +29,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.48'
     implementation 'org.apache.pdfbox:pdfbox:2.0.24'
+
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.0'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0'
 
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
@@ -34,8 +48,8 @@ test {
 jacocoTestReport {
     dependsOn test
     reports {
-        xml.required = false
-        csv.required = false
+        xml.enabled = true
+        csv.enabled = true
     }
 }
 
@@ -63,6 +77,12 @@ check.dependsOn jacocoTestCoverageVerification
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = '11'
+    }
 }
 
 task stage(dependsOn: ['build', 'clean'])
