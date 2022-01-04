@@ -1,8 +1,10 @@
 package com.avilapps.pdf_services.domain.repository
 
-import java.io.File
+import java.net.URL
 
 interface DocumentRepository {
 
-    fun upload(destinationPath: String, content: File)
+    fun upload(destinationPath: String, content: ByteArray)
+
+    fun getPublicUrl(filePath: String): URL
 }
