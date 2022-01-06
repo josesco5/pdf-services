@@ -32,12 +32,14 @@ class DocumentsControllerTest {
     private lateinit var sentFile: MockMultipartFile
     private lateinit var file: File
     private lateinit var destinationPath: String
+    private lateinit var content: ByteArray
 
     @BeforeEach
     fun setup() {
+        content = "Test content".toByteArray()
         sentFile = MockMultipartFile(
             "file", "test.pdf", MediaType.APPLICATION_PDF_VALUE,
-            "Test content".toByteArray()
+            content
         )
 
         destinationPath = ""
@@ -47,7 +49,7 @@ class DocumentsControllerTest {
     @Test
     fun `should return OK response`() {
         Mockito.`when`(fileUtils.receiveRemotePDF(any(MultipartFile::class.java))).thenReturn(file)
-        Mockito.`when`(documentService.upload(destinationPath, file)).thenReturn("http://localhost/pdf")
+        Mockito.`when`(documentService.upload(destinationPath, content)).thenReturn("http://localhost/pdf")
 
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/documents/upload")
             .file(sentFile)
