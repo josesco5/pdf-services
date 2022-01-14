@@ -18,6 +18,9 @@ class DocumentServiceTest {
     @Mock
     private lateinit var documentRepository: DocumentRepository
 
+    @Mock
+    private lateinit var foliationService: FoliationService
+
     @InjectMocks
     private lateinit var documentService: DocumentService
 

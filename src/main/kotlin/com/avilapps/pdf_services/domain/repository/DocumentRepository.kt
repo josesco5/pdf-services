@@ -7,4 +7,6 @@ interface DocumentRepository {
     fun upload(destinationPath: String, content: ByteArray)
 
     fun getPublicUrl(filePath: String): URL
+
+    fun download(filePath: String): ByteArray
 }

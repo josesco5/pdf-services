@@ -42,4 +42,14 @@ class AWSDocumentRepository(private val s3Client: S3Client,
 
         return presignedGetObjectRequest.url()
     }
+
+    override fun download(filePath: String): ByteArray {
+        val getObjectRequest = GetObjectRequest.builder()
+            .bucket(bucketName)
+            .key(filePath)
+            .build()
+        val fullObject = s3Client.getObject(getObjectRequest)
+
+        return fullObject.readBytes()
+    }
 }
