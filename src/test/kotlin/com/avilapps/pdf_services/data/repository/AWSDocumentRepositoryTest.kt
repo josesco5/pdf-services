@@ -8,9 +8,13 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
+import software.amazon.awssdk.core.ResponseInputStream
 import software.amazon.awssdk.core.sync.RequestBody
+import software.amazon.awssdk.http.AbortableInputStream
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.s3.model.GetObjectRequest
+import software.amazon.awssdk.services.s3.model.GetObjectResponse
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import software.amazon.awssdk.services.s3.model.PutObjectResponse
 import software.amazon.awssdk.services.s3.presigner.S3Presigner
@@ -60,5 +64,14 @@ class AWSDocumentRepositoryTest {
     @Test
     fun shouldBuildPublicUrl() {
         documentRepository.getPublicUrl(destinationPath)
+    }
+    
+    @Test
+    fun shouldDownloadFile() {
+        val response = ResponseInputStream<GetObjectResponse>(GetObjectResponse.builder().build(), AbortableInputStream.create(AbortableInputStream.nullInputStream()))
+        Mockito.`when`(s3Client.getObject(Mockito.any(GetObjectRequest::class.java)))
+            .thenReturn(response)
+        
+        documentRepository.download("/upload/file.pdf")
     }
 }

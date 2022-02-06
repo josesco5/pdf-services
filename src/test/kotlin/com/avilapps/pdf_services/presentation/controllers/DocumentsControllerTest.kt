@@ -1,7 +1,9 @@
 package com.avilapps.pdf_services.presentation.controllers
 
 import com.avilapps.pdf_services.domain.service.DocumentService
+import com.avilapps.pdf_services.presentation.model.DocumentFoliateRequest
 import com.avilapps.pdf_services.utils.FileUtils
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.*
@@ -47,7 +49,7 @@ class DocumentsControllerTest {
     }
 
     @Test
-    fun `should return OK response`() {
+    fun `should return OK response when uploading a file`() {
         Mockito.`when`(fileUtils.receiveRemotePDF(any(MultipartFile::class.java))).thenReturn(file)
         Mockito.`when`(documentService.upload(destinationPath, content)).thenReturn("http://localhost/pdf")
 
@@ -55,5 +57,17 @@ class DocumentsControllerTest {
             .file(sentFile)
             .param("destinationPath", destinationPath))
             .andExpect(status().isOk)
+    }
+
+    @Test
+    fun `should return OK response when foliating a file`() {
+        val foliateRequest = DocumentFoliateRequest("", 1, "")
+        Mockito.`when`(documentService.foliate(anyString(), anyInt(), anyString())).thenReturn("http://localhost/pdf")
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/documents/foliate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(ObjectMapper().writeValueAsString(foliateRequest)))
+            .andExpect(status().isOk)
+
     }
 }

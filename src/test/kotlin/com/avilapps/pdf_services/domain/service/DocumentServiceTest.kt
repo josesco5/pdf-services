@@ -42,4 +42,19 @@ class DocumentServiceTest {
 
         documentService.upload(destinationPath, content)
     }
+
+    @Test
+    fun shouldFoliateDocument() {
+        val originPath = "/file.pdf"
+        val destinationPath = "/file.pdf"
+        val fileContent = "file content".toByteArray()
+        val folio = 1
+        val foliatedContent = "".toByteArray()
+        Mockito.`when`(documentRepository.download(originPath)).thenReturn(fileContent)
+        Mockito.`when`(foliationService.foliate(originPath, fileContent, folio)).thenReturn(foliatedContent)
+        Mockito.doNothing().`when`(documentRepository).upload(destinationPath, foliatedContent)
+        Mockito.`when`(documentRepository.getPublicUrl(destinationPath)).thenReturn(URL("http://localhost"))
+
+        documentService.foliate(originPath, folio, destinationPath)
+    }
 }
